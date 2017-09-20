@@ -7,10 +7,10 @@ import helpme_productions.com.braintrainer.model.Question;
 
 public class MainActivityPresenter implements MainActivityContract.Presenter{
     private MainActivityContract.View view;
-    Random random = new Random();
-    float aveargeDifficulty;
-    int corectAnswerContainer;
-    int questionType;
+    private Random random = new Random();
+    //private float aveargeDifficulty;
+    private int corectAnswerContainer;
+   // int questionType;
     @Override
     public void addView(MainActivityContract.View view) {
         this.view = view;
@@ -24,22 +24,22 @@ public class MainActivityPresenter implements MainActivityContract.Presenter{
     @Override
     public void nextQuestion(int score, int answered) {
         corectAnswerContainer= random.nextInt(4)+1;
-        if (answered >0) {
-           aveargeDifficulty = score / answered;
-        }
+//        if (answered >0) {
+//         //  aveargeDifficulty = score / answered;
+//        }
         additionQuestion();
     }
 
     @Override
     public void additionQuestion() {
-        int first = random.nextInt(10);
-        int second = random.nextInt(10);
+        int first = random.nextInt(10)+1;
+        int second = random.nextInt(10)+1;
         int sum = first + second;
         String questionAsked = first +" + "+ second +" = ?";
         int firstAnswer  = sum + random.nextInt(5)+1;
         int secondAnswer = sum - random.nextInt(5)-1;
-        int thirdAnswer = sum + random.nextInt(10)+1;
-        int forthAnswer = sum - random.nextInt(10)-2;
+        int thirdAnswer = sum + random.nextInt(5)+2;
+        int forthAnswer = sum - random.nextInt(5)-2;
         switch (corectAnswerContainer){
             case 1:
                 firstAnswer = sum;

@@ -1,6 +1,7 @@
 package helpme_productions.com.braintrainer.view.activites.mainActivity;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     Button answer3;
     @BindView(R.id.btnAnswer4)
     Button answer4;
+    @BindView(R.id.btnRestart)
+    Button restart;
     @BindView(R.id.llStart)
     LinearLayout startLayout;
     @BindView(R.id.llGameContainer)
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @BindView(R.id.tvScore)
     TextView score;
     @BindView(R.id.tvTimer)
-    TextView timer;
+    TextView timerBox;
     @BindView(R.id.tvQuestion)
     TextView questionAsked;
 
@@ -85,8 +88,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public void startGame() {
         startLayout.setVisibility(View.GONE);
         gameLayout.setVisibility(View.VISIBLE);
+        answer4.setEnabled(true);
+        answer3.setEnabled(true);
+        answer2.setEnabled(true);
+        answer1.setEnabled(true);
         currentCorect = 0;
         currentAnswered = 0;
+        String scoreText = "Score: " + currentCorect+"/"+currentAnswered;
+        score.setText(scoreText);
+        restart.setVisibility(View.GONE);
+        startTimer();
         presenter.nextQuestion(currentCorect,currentAnswered);
     }
 
@@ -114,8 +125,39 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }else {
             Toast.makeText(this, "Wrong", Toast.LENGTH_SHORT).show();
         }
-        String scoreText = currentCorect+" / "+ currentAnswered;
+        String scoreText = "Score: " + currentCorect+"/"+currentAnswered;
         score.setText(scoreText);
         presenter.nextQuestion(currentCorect,currentAnswered);
+    }
+    public void startTimer(){
+        new CountDownTimer(31000,1000) {
+            @Override
+            public void onTick(long l) {
+                String timerText = "Time: "+ l/1000;
+                timerBox.setText(timerText);
+            }
+
+            @Override
+            public void onFinish() {
+                String timerText = "Time: 0";
+                timerBox.setText(timerText);
+                endGame();
+            }
+        }.start();
+    }
+
+    private void endGame() {
+        answer4.setEnabled(false);
+        answer3.setEnabled(false);
+        answer2.setEnabled(false);
+        answer1.setEnabled(false);
+        restart.setVisibility(View.VISIBLE);
+        String finalScore = "Congradulations your final score was: "+ currentCorect +"/"+ currentAnswered;
+        Toast.makeText(this, finalScore, Toast.LENGTH_LONG).show();
+
+    }
+
+    public void restartGame(View view) {
+        startGame();
     }
 }
